@@ -53,9 +53,9 @@ Thumbs.db
 .ipynb_checkpoints/
 *.ipynb
 
-# Data
-data/
-datasets/
+# Data (but not src/kcd/data/ which contains code)
+/data/
+/datasets/
 
 # Logs
 *.log

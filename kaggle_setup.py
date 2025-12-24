@@ -25,29 +25,69 @@ if not (cwd / "src" / "kcd").exists():
 
 print("  [OK] Repository structure found")
 
-# Check for all required __init__.py files
-init_files = [
-    cwd / "src" / "__init__.py",
-    cwd / "src" / "kcd" / "__init__.py",
-    cwd / "src" / "kcd" / "data" / "__init__.py",
-    cwd / "src" / "kcd" / "models" / "__init__.py",
+# Check for all required __init__.py files and their content
+init_file_contents = {
+    cwd / "src" / "__init__.py": '"""KCD (K-Conditioned Decomposition) package."""\n',
+    cwd / "src" / "kcd" / "__init__.py": '"""K-Conditioned Decomposition implementation."""\n',
+    cwd / "src" / "kcd" / "data" / "__init__.py": '''"""Data loading and preprocessing modules."""
+
+from .datasets import (
+    ImageFolderDataset,
+    build_dataloader,
+    get_dataset,
+    get_dataloader,
+    DatasetConfig,
+    IMAGENET_MEAN,
+    IMAGENET_STD,
+)
+
+__all__ = [
+    "ImageFolderDataset",
+    "build_dataloader",
+    "get_dataset",
+    "get_dataloader",
+    "DatasetConfig",
+    "IMAGENET_MEAN",
+    "IMAGENET_STD",
 ]
+''',
+    cwd / "src" / "kcd" / "models" / "__init__.py": '''"""Neural network models for K-Conditioned Decomposition."""
 
-missing_inits = []
-for init_file in init_files:
-    if not init_file.exists():
-        missing_inits.append(init_file)
-        print(f"  [WARN] WARNING: Missing {init_file}")
+from .encoder import ConvTokenEncoder, Encoder, PretrainedVisionEncoder
+from .slot_attention import SlotAttention
+from .decoder import LayerDecoder, Decoder
+from .kcd_model import KCDModel
 
-# Create missing __init__.py files
-if missing_inits:
-    print("  --> Creating missing __init__.py files...")
-    for init_file in missing_inits:
+__all__ = [
+    "ConvTokenEncoder",
+    "Encoder",
+    "PretrainedVisionEncoder",
+    "SlotAttention",
+    "LayerDecoder",
+    "Decoder",
+    "KCDModel",
+]
+''',
+}
+
+missing_or_empty = []
+for init_file, content in init_file_contents.items():
+    if not init_file.exists() or init_file.stat().st_size < 10:
+        missing_or_empty.append((init_file, content))
+        if not init_file.exists():
+            print(f"  [WARN] WARNING: Missing {init_file}")
+        else:
+            print(f"  [WARN] WARNING: Empty or corrupted {init_file}")
+
+# Create or fix __init__.py files
+if missing_or_empty:
+    print("  --> Creating/fixing __init__.py files...")
+    for init_file, content in missing_or_empty:
         init_file.parent.mkdir(parents=True, exist_ok=True)
-        init_file.write_text('"""Package initialization."""\n')
-        print(f"    [OK] Created {init_file}")
+        init_file.write_text(content)
+        print(f"    [OK] Fixed {init_file}")
 else:
-    print("  [OK] All __init__.py files present")
+    print("  [OK] All __init__.py files present and valid")
 
 # Step 2: Add to Python path
 print("\n[2/5] Configuring Python path...")
