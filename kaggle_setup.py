@@ -18,87 +18,111 @@ print(f"  Current directory: {cwd}")
 
 # Expected structure: /kaggle/working/kcd/
 if not (cwd / "src" / "kcd").exists():
-    print("  ✗ ERROR: src/kcd/ not found!")
+    print("  [ERROR] ERROR: src/kcd/ not found!")
     print("  Make sure you cloned the repo to /kaggle/working/kcd/")
     print("  Run: !git clone https://github.com/notGiGi/UNFOLD.git /kaggle/working/kcd")
     sys.exit(1)
 
-print("  ✓ Repository structure found")
+print("  [OK] Repository structure found")
+
+# Check for all required __init__.py files
+init_files = [
+    cwd / "src" / "__init__.py",
+    cwd / "src" / "kcd" / "__init__.py",
+    cwd / "src" / "kcd" / "data" / "__init__.py",
+    cwd / "src" / "kcd" / "models" / "__init__.py",
+]
+
+missing_inits = []
+for init_file in init_files:
+    if not init_file.exists():
+        missing_inits.append(init_file)
+        print(f"  [WARN] WARNING: Missing {init_file}")
+
+# Create missing __init__.py files
+if missing_inits:
+    print("  --> Creating missing __init__.py files...")
+    for init_file in missing_inits:
+        init_file.parent.mkdir(parents=True, exist_ok=True)
+        init_file.write_text('"""Package initialization."""\n')
+        print(f"    [OK] Created {init_file}")
+else:
+    print("  [OK] All __init__.py files present")
 
 # Step 2: Add to Python path
 print("\n[2/5] Configuring Python path...")
 kcd_path = str(cwd)
 if kcd_path not in sys.path:
     sys.path.insert(0, kcd_path)
-    print(f"  ✓ Added {kcd_path} to sys.path")
+    print(f"  [OK] Added {kcd_path} to sys.path")
 else:
-    print(f"  ✓ {kcd_path} already in sys.path")
+    print(f"  [OK] {kcd_path} already in sys.path")
 
 # Step 3: Verify imports
 print("\n[3/5] Verifying imports...")
 try:
     from src.kcd.models import KCDModel
-    print("  ✓ src.kcd.models imported")
+    print("  [OK] src.kcd.models imported")
 except ImportError as e:
-    print(f"  ✗ ERROR importing models: {e}")
+    print(f"  [ERROR] ERROR importing models: {e}")
     sys.exit(1)
 
 try:
     from src.kcd.data.datasets import ImageFolderDataset
-    print("  ✓ src.kcd.data.datasets imported")
+    print("  [OK] src.kcd.data.datasets imported")
 except ImportError as e:
-    print(f"  ✗ ERROR importing datasets: {e}")
+    print(f"  [ERROR] ERROR importing datasets: {e}")
     sys.exit(1)
 
 try:
     from src.kcd.train import train_from_config
-    print("  ✓ src.kcd.train imported")
+    print("  [OK] src.kcd.train imported")
 except ImportError as e:
-    print(f"  ✗ ERROR importing train: {e}")
+    print(f"  [ERROR] ERROR importing train: {e}")
     sys.exit(1)
 
 # Step 4: Check dependencies
 print("\n[4/5] Checking dependencies...")
 try:
     import torch
-    print(f"  ✓ PyTorch {torch.__version__}")
+    print(f"  [OK] PyTorch {torch.__version__}")
 except ImportError:
-    print("  ✗ PyTorch not found")
+    print("  [ERROR] PyTorch not found")
     sys.exit(1)
 
 try:
     import yaml
-    print("  ✓ PyYAML installed")
+    print("  [OK] PyYAML installed")
 except ImportError:
-    print("  ⚠ PyYAML not found, installing...")
+    print("  [WARN] PyYAML not found, installing...")
     os.system("pip install -q PyYAML")
     import yaml
-    print("  ✓ PyYAML installed")
+    print("  [OK] PyYAML installed")
 
 try:
     from PIL import Image
-    print("  ✓ Pillow installed")
+    print("  [OK] Pillow installed")
 except ImportError:
-    print("  ✗ Pillow not found")
+    print("  [ERROR] Pillow not found")
     sys.exit(1)
 
 # Step 5: Check GPU
 print("\n[5/5] Checking GPU...")
 if torch.cuda.is_available():
-    print(f"  ✓ GPU: {torch.cuda.get_device_name(0)}")
-    print(f"  ✓ CUDA {torch.version.cuda}")
-    print(f"  ✓ Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+    print(f"  [OK] GPU: {torch.cuda.get_device_name(0)}")
+    print(f"  [OK] CUDA {torch.version.cuda}")
+    print(f"  [OK] Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
 else:
-    print("  ⚠ No GPU available (will use CPU)")
+    print("  [WARN] No GPU available (will use CPU)")
 
 # Step 6: Check dataset
 print("\n[Bonus] Checking COCO dataset...")
 data_path = Path("/kaggle/input/coco-2017-dataset/coco2017/test2017")
 if data_path.exists():
     image_count = len(list(data_path.glob("*.jpg")))
-    print(f"  ✓ COCO dataset found: {image_count:,} images")
+    print(f"  [OK] COCO dataset found: {image_count:,} images")
 else:
-    print("  ⚠ COCO dataset not found")
+    print("  [WARN] COCO dataset not found")
     print("    Add 'coco-2017-dataset' to your notebook inputs")
 
 # Summary
