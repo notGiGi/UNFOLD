@@ -20,13 +20,13 @@ slot_usage_weight: 0.001  # Prevent dead slots / entropy
 
 # Training settings
 mixed_precision: true  # Use torch.cuda.amp for faster training
-deterministic: true  # Reproducible training (set to false for speed)
+deterministic: false  # DISABLED for speed (cuDNN autotuner was too slow)
 seed: 42  # Random seed for reproducibility
 
 # Checkpointing
 checkpoint_dir: "checkpoints"  # Directory to save checkpoints
 log_dir: "logs"  # Directory for JSONL logs
-save_every: 5  # Save checkpoint every N epochs
+save_every: 1  # Save checkpoint EVERY epoch (for visualization)
 log_every: 10  # Log metrics to JSONL every N steps
 
 # Dataset (adjust these based on your data)
