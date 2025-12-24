@@ -67,7 +67,7 @@ def check_dataset():
     dataset = ImageFolderDataset(
         root_dir=str(data_path),
         image_size=(128, 128),
-        normalize=True,
+        use_normalization=True,
     )
 
     logger.info(f"✓ Dataset created: {len(dataset)} images")

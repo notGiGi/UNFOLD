@@ -33,7 +33,7 @@ def main():
     dataset = ImageFolderDataset(
         root_dir=data_root,
         image_size=(128, 128),
-        normalize=True,
+        use_normalization=True,
     )
 
     # Create data loader

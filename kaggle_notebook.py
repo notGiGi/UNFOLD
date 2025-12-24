@@ -76,7 +76,7 @@ print("Testing on real COCO images...")
 dataset = ImageFolderDataset(
     root_dir="/kaggle/input/coco-2017-dataset/coco2017/test2017",
     image_size=(128, 128),
-    normalize=True,
+    use_normalization=True,
 )
 
 loader = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=2)
@@ -208,7 +208,7 @@ print("=" * 60)
 dataset = ImageFolderDataset(
     root_dir="/kaggle/input/coco-2017-dataset/coco2017/test2017",
     image_size=TRAINING_CONFIG["image_size"],
-    normalize=True,
+    use_normalization=True,
 )
 
 train_loader = DataLoader(

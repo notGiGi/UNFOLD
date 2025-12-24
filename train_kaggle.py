@@ -68,7 +68,7 @@ def main():
     dataset = ImageFolderDataset(
         root_dir=data_path,
         image_size=(128, 128),  # Match decoder output_size in config
-        normalize=True,
+        use_normalization=True,
     )
 
     logger.info(f"  Dataset size: {len(dataset)} images")
