@@ -13,7 +13,7 @@ import yaml
 from torch.utils.data import DataLoader
 
 # Add src to path for imports
-sys.path.append('/kaggle/working')
+sys.path.insert(0, '/kaggle/working/kcd')
 
 from src.kcd.models import KCDModel
 from src.kcd.data.datasets import ImageFolderDataset

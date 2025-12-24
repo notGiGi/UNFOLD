@@ -11,7 +11,7 @@ import torch
 from torch.utils.data import DataLoader
 
 # Add src to path
-sys.path.append('/kaggle/working')
+sys.path.insert(0, '/kaggle/working/kcd')
 
 from src.kcd.data.datasets import ImageFolderDataset
 from src.kcd.train import train_from_config
