@@ -1,0 +1,58 @@
+# Training configuration for K-Conditioned Decomposition
+
+# Dataset
+data:
+  dataset_name: "clevr"  # or custom dataset
+  image_size: [128, 128]
+  batch_size: 64
+  num_workers: 4
+  train_split: 0.9
+  crop_type: null  # 'center', 'random', or null
+  use_normalization: false  # Use ImageNet mean/std normalization
+
+# K-conditioning parameters
+k_conditioning:
+  k_min: 2
+  k_max: 10
+  sampling_strategy: "uniform"  # uniform, weighted, curriculum
+
+# Optimization
+optimizer:
+  type: "adam"
+  lr: 0.0004
+  betas: [0.9, 0.999]
+  eps: 1e-8
+  weight_decay: 0.0
+
+# Learning rate schedule
+lr_scheduler:
+  type: "warmup_cosine"
+  warmup_steps: 10000
+  total_steps: 500000
+
+# Training loop
+training:
+  max_steps: 500000
+  gradient_clip: 1.0
+  log_interval: 100
+  checkpoint_interval: 10000
+  eval_interval: 5000
+  seed: 42
+
+# Loss weights
+loss:
+  reconstruction_weight: 1.0
+  regularization_weight: 0.0
+
+# Checkpointing
+checkpoint:
+  save_dir: "outputs/checkpoints"
+  keep_last_n: 5
+  resume_from: null
+
+# Logging
+logging:
+  log_dir: "outputs/logs"
+  log_level: "INFO"
+  use_tensorboard: false
+  use_wandb: false

@@ -1,0 +1,34 @@
+# Training configuration for K-Conditioned Decomposition
+
+# K-conditioning parameters (core of the paper)
+k_min: 3  # Minimum number of slots
+k_max: 7  # Maximum number of slots
+# During training, K is sampled uniformly from [k_min, k_max] for each batch
+# This forces the model to learn decomposition at multiple granularities
+
+# Optimization
+learning_rate: 0.0001  # 1e-4, Adam default
+weight_decay: 0.0  # No weight decay by default
+max_epochs: 100  # Total training epochs
+gradient_clip: 1.0  # Clip gradients to prevent exploding gradients
+
+# Loss weights
+recon_loss_type: "mse"  # "mse" or "l1"
+overlap_penalty_weight: 0.1  # Penalize overlapping alpha masks
+tv_loss_weight: 0.01  # Total variation loss for smooth alphas
+slot_usage_weight: 0.001  # Prevent dead slots
+
+# Training settings
+mixed_precision: true  # Use torch.cuda.amp for faster training
+deterministic: true  # Reproducible training (set to false for speed)
+seed: 42  # Random seed for reproducibility
+
+# Checkpointing
+checkpoint_dir: "checkpoints"  # Directory to save checkpoints
+log_dir: "logs"  # Directory for JSONL logs
+save_every: 5  # Save checkpoint every N epochs
+log_every: 10  # Log metrics to JSONL every N steps
+
+# Dataset (adjust these based on your data)
+batch_size: 32  # Batch size (reduce if OOM)
+num_workers: 4  # Number of data loading workers

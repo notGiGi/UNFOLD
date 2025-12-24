@@ -1,0 +1,38 @@
+# Model configuration for K-Conditioned Decomposition with Pretrained Encoder
+
+# Pretrained Vision Encoder
+# This uses a pretrained Vision Transformer (ViT) for robust visual features
+encoder:
+  type: "pretrained"  # Use pretrained encoder
+  backbone: "vit_b_16"  # Vision Transformer Base with 16x16 patches
+                         # Options: vit_b_16, vit_b_32, vit_l_16, resnet50, convnext_base
+  pretrained: true  # Load ImageNet pretrained weights
+  embed_dim: 64  # Project to 64-dim for slot attention
+  freeze: true  # Freeze encoder weights (train only slot attention + decoder)
+                # Set to false for end-to-end fine-tuning
+  image_size: 224  # Expected input image size (ViT requirement)
+
+# Slot Attention (same as before)
+slot_attention:
+  slot_dim: 64  # Must match encoder embed_dim
+  num_iterations: 3  # 3-7 typical, more = sharper separation
+  mlp_hidden_dim: 128
+  epsilon: 0.00000001  # Numerical stability in normalization (1e-8)
+  use_implicit_diff: false  # Experimental: stop gradients through init
+
+# Decoder (same as before)
+decoder:
+  type: "layer"  # "layer" (new) or "broadcast" (legacy)
+  slot_dim: 64  # Must match slot_attention slot_dim
+  hidden_dims: [64, 64, 64, 64]
+  output_size: [224, 224]  # Match encoder image_size
+  kernel_size: 5
+  activation: "relu"
+  use_layer_norm: false  # Optional: normalize position-encoded input
+
+# Notes:
+# - Pretrained encoder provides rich visual features from ImageNet
+# - With frozen encoder, only slot attention + decoder are trained
+# - This is MUCH faster and more stable than training from scratch
+# - For fine-tuning: set freeze=false and use lower learning rate (1e-5)
+# - ViT outputs 196 tokens for 224x224 images (14x14 grid with 16x16 patches)

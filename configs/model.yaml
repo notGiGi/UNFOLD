@@ -1,0 +1,27 @@
+# Model configuration for K-Conditioned Decomposition
+
+encoder:
+  type: "conv_token"  # "conv_token" or "cnn" (legacy)
+  in_channels: 3
+  hidden_dims: [64, 64, 64, 64]
+  embedding_dim: 64
+  kernel_size: 5
+  stride: 1  # 1 = no downsampling, 2 = 2x downsampling per block
+  num_groups: 8  # For GroupNorm (must divide all dims)
+  activation: "relu"
+
+slot_attention:
+  slot_dim: 64  # Must match encoder embedding_dim
+  num_iterations: 3  # 3-7 typical, more = sharper separation
+  mlp_hidden_dim: 128
+  epsilon: 0.00000001  # Numerical stability in normalization (1e-8)
+  use_implicit_diff: false  # Experimental: stop gradients through init
+
+decoder:
+  type: "layer"  # "layer" (new) or "broadcast" (legacy)
+  slot_dim: 64  # Must match slot_attention slot_dim
+  hidden_dims: [64, 64, 64, 64]
+  output_size: [128, 128]  # Output image size (H, W)
+  kernel_size: 5
+  activation: "relu"
+  use_layer_norm: false  # Optional: normalize position-encoded input

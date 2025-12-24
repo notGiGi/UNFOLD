@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(python test_kcd_model.py:*)",
+      "Bash(timeout 30 tail:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}
