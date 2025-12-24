@@ -35,23 +35,23 @@ def main():
     # CONFIGURATION
     # ============================================================
 
-    # Dataset path (COCO 2017 test set)
-    data_path = "/kaggle/input/coco-2017-dataset/coco2017/test2017"
+    # Dataset path (COCO 2017 train set)
+    data_path = "/kaggle/input/coco-2017-dataset/coco2017/train2017"
 
     # Model configuration (choose one)
     # Option 1: Custom encoder (train from scratch)
-    model_config = "configs/model.yaml"
+    # model_config = "configs/model.yaml"
 
     # Option 2: Pretrained encoder (recommended for COCO)
-    # model_config = "configs/model_pretrained.yaml"
+    model_config = "configs/model_pretrained.yaml"  # ViT-B/16, frozen, 224x224
 
     # Training configuration
     train_config = "configs/training.yaml"
 
     # Training settings
-    batch_size = 32  # Adjust based on GPU memory
+    batch_size = 16  # Plenty of VRAM on T4
     num_workers = 2  # Kaggle has 2 CPU cores
-    num_epochs = 50  # Override config if needed
+    num_epochs = None  # Use config file (3 epochs for sanity check)
 
     # Resume from checkpoint (set to None for fresh start)
     resume_from = None
@@ -67,7 +67,7 @@ def main():
     # Create dataset
     dataset = ImageFolderDataset(
         root_dir=data_path,
-        image_size=(128, 128),  # Match decoder output_size in config
+        image_size=(224, 224),  # Match decoder output_size in config (224 for ViT)
         use_normalization=True,
     )
 
