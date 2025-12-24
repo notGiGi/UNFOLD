@@ -4,7 +4,9 @@
       "Bash(tree:*)",
       "Bash(python test_kcd_model.py:*)",
       "Bash(timeout 30 tail:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ]
   }
 }
