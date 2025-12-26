@@ -1,0 +1,40 @@
+# Training configuration for PRODUCTION DEMO
+# Optimized for robustness and visual quality
+
+# K-conditioning - FULL RANGE
+k_min: 2  # From simple (background/foreground)
+k_max: 8  # To complex (many objects)
+# Model learns to handle ANY K in this range
+
+# Optimization - STABLE CONVERGENCE
+learning_rate: 0.00005  # Lower LR for ViT (5e-5)
+weight_decay: 0.0001  # Small regularization
+max_epochs: 50  # Proper convergence
+gradient_clip: 1.0
+
+# Loss weights - TUNED FOR QUALITY
+recon_loss_type: "mse"
+overlap_penalty_weight: 0.15  # STRONG separation enforcement
+tv_loss_weight: 0.02  # STRONG spatial smoothness
+slot_usage_weight: 0.002  # Prevent dead slots
+
+# Training settings
+mixed_precision: true  # Essential for ViT
+deterministic: false  # Speed over reproducibility
+seed: 42
+
+# Checkpointing - PRODUCTION
+checkpoint_dir: "checkpoints"
+log_dir: "logs"
+save_every: 5  # Save every 5 epochs
+log_every: 100  # Frequent logging
+
+# Dataset - PRODUCTION SCALE
+batch_size: 16  # As large as fits in memory
+num_workers: 2
+
+# Expected training time with 50K images:
+# - ViT-B/16 @ 224x224 is slower than ResNet
+# - ~15-20 min/epoch with T4
+# - 50 epochs × 15 min = ~12-13 hours total
+# BUT: Results will be PUBLICATION QUALITY

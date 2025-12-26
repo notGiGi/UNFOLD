@@ -1,0 +1,37 @@
+# Model configuration for PRODUCTION DEMO
+# Optimized for visual quality and robustness on any image
+
+# Pretrained Vision Encoder - BEST QUALITY
+encoder:
+  type: "pretrained"
+  backbone: "vit_b_16"  # ViT for best visual features (slower but worth it)
+  pretrained: true
+  embed_dim: 128  # Higher dim for better representation
+  freeze: true  # Train only slot attention + decoder
+  image_size: 224  # Full resolution for quality
+
+# Slot Attention - PRODUCTION SETTINGS
+slot_attention:
+  slot_dim: 128  # Match encoder embed_dim
+  num_iterations: 4  # More iterations = better separation
+  mlp_hidden_dim: 256  # Larger MLP for expressiveness
+  epsilon: 0.00000001
+  use_implicit_diff: false
+
+# Decoder - HIGH QUALITY OUTPUT
+decoder:
+  type: "layer"
+  slot_dim: 128  # Match slot_attention
+  hidden_dims: [128, 128, 128, 128, 128]  # Deeper decoder
+  output_size: [224, 224]  # Full resolution
+  kernel_size: 5
+  activation: "relu"
+  use_layer_norm: true  # Better normalization
+
+# Notes for Production Demo:
+# - ViT-B/16 @ 224x224 provides best visual understanding
+# - 128-dim slots capture more detail per layer
+# - 4 slot iterations ensure clean separation
+# - Deeper decoder (5 layers) for better reconstruction quality
+# - This config is SLOW to train but produces IMPRESSIVE results
+# - Perfect for paper figures and public demos
