@@ -4,18 +4,18 @@
 # This uses a pretrained Vision Transformer (ViT) for robust visual features
 encoder:
   type: "pretrained"  # Use pretrained encoder
-  backbone: "vit_b_16"  # Vision Transformer Base with 16x16 patches
+  backbone: "resnet50"  # ResNet50 (MUCH faster than ViT)
                          # Options: vit_b_16, vit_b_32, vit_l_16, resnet50, convnext_base
   pretrained: true  # Load ImageNet pretrained weights
   embed_dim: 64  # Project to 64-dim for slot attention
   freeze: true  # Freeze encoder weights (train only slot attention + decoder)
                 # Set to false for end-to-end fine-tuning
-  image_size: 224  # Expected input image size (ViT requirement)
+  image_size: 128  # Reduced from 224 for speed
 
 # Slot Attention (same as before)
 slot_attention:
   slot_dim: 64  # Must match encoder embed_dim
-  num_iterations: 3  # 3-7 typical, more = sharper separation
+  num_iterations: 2  # Reduced from 3 for speed
   mlp_hidden_dim: 128
   epsilon: 0.00000001  # Numerical stability in normalization (1e-8)
   use_implicit_diff: false  # Experimental: stop gradients through init
@@ -25,7 +25,7 @@ decoder:
   type: "layer"  # "layer" (new) or "broadcast" (legacy)
   slot_dim: 64  # Must match slot_attention slot_dim
   hidden_dims: [64, 64, 64, 64]
-  output_size: [224, 224]  # Match encoder image_size
+  output_size: [128, 128]  # Match encoder image_size (reduced from 224)
   kernel_size: 5
   activation: "relu"
   use_layer_norm: false  # Optional: normalize position-encoded input

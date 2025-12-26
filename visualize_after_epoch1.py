@@ -185,7 +185,7 @@ def main():
     print("\nLoading test images...")
     dataset = ImageFolderDataset(
         root_dir="/kaggle/input/coco-2017-dataset/coco2017/train2017",
-        image_size=(224, 224),
+        image_size=(128, 128),
         use_normalization=True,
     )
 

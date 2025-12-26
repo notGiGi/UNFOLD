@@ -49,7 +49,7 @@ def main():
     train_config = "configs/training.yaml"
 
     # Training settings
-    batch_size = 16  # Plenty of VRAM on T4
+    batch_size = 8  # Plenty of VRAM on T4
     num_workers = 2  # Kaggle has 2 CPU cores
     num_epochs = None  # Use config file (3 epochs for sanity check)
 
@@ -67,7 +67,7 @@ def main():
     # Create dataset
     dataset = ImageFolderDataset(
         root_dir=data_path,
-        image_size=(224, 224),  # Match decoder output_size in config (224 for ViT)
+        image_size=(128, 128),  # Match decoder output_size in config (224 for ViT)
         use_normalization=True,
     )
 
