@@ -44,8 +44,9 @@ def main():
     batch_size = 8
     num_workers = 2
 
-    # SMALL SUBSET - only 1000 images for quick test
-    subset_size = 1000
+    # SUBSET SIZE - adjust based on needs
+    # 1000 = 1 min, 10000 = 10 min, 50000 = 50 min per 3 epochs
+    subset_size = 10000
 
     logger.info("\nSetting up dataset...")
     logger.info(f"  Data path: {data_path}")
@@ -107,7 +108,7 @@ def main():
     logger.info("TRAINING COMPLETED")
     logger.info("=" * 60)
     logger.info(f"Final checkpoint: {trainer.checkpoint_dir / 'checkpoint_final.pt'}")
-    logger.info(f"Training logs: {trainer.log_file}")
+    logger.info(f"Training logs: {trainer.log_dir}")
 
 
 if __name__ == "__main__":
