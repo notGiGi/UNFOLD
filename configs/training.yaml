@@ -9,7 +9,7 @@ k_max: 4  # Maximum number of slots (reduced from 6 for speed)
 # Optimization
 learning_rate: 0.0001  # 1e-4, Adam default
 weight_decay: 0.0  # No weight decay by default
-max_epochs: 3  # Sanity check with 3 epochs
+max_epochs: 10  # Scientific validation with 10 epochs
 gradient_clip: 1.0  # Clip gradients to prevent exploding gradients
 
 # Loss weights
@@ -26,8 +26,8 @@ seed: 42  # Random seed for reproducibility
 # Checkpointing
 checkpoint_dir: "checkpoints"  # Directory to save checkpoints
 log_dir: "logs"  # Directory for JSONL logs
-save_every: 1  # Save checkpoint EVERY epoch (for visualization)
-log_every: 10  # Log metrics to JSONL every N steps
+save_every: 2  # Save checkpoint every 2 epochs
+log_every: 50  # Log metrics every 50 steps (more frequent updates)
 
 # Dataset (adjust these based on your data)
 batch_size: 8  # Batch size (reduced for speed)
